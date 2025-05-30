@@ -1,0 +1,55 @@
+<!-- templates/chart.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kafka Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>Live Weather Data</h2>
+  <canvas id="lineChart" width="800" height="400"></canvas>
+
+  <script>
+    async function fetchData() {
+      const response = await fetch('/data');
+      const data = await response.json();
+
+      const labels = data.map(d => d.timestamp || 'Unknown');
+      const temps = data.map(d => d.temp || 0);
+
+      return { labels, temps };
+    }
+
+    async function renderChart() {
+      const ctx = document.getElementById('lineChart').getContext('2d');
+      const { labels, temps } = await fetchData();
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Temperature (°C)',
+            data: temps,
+            borderColor: 'blue',
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+
+    renderChart();
+
+    // Refresh every 10 seconds
+    setInterval(() => {
+      location.reload();
+    }, 10000);
+  </script>
+</body>
+</html>
