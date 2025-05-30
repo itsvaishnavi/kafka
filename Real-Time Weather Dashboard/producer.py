@@ -9,8 +9,8 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
-API_KEY = '57d49cea9576fa681da96b6a6a0bd0c0'
-CITY = 'Berlin'
+API_KEY = 'api-key'
+CITY = 'city'
 TOPIC = 'weather-data'
 
 def get_weather():
